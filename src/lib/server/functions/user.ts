@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { generateId, type User as UserLucia } from "lucia";
+import { generateId, generateIdFromEntropySize, type User as UserLucia } from "lucia";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Argon2id } from "oslo/password";
 
@@ -19,6 +19,39 @@ export const createUser = async (data: Omit<Prisma.UserCreateInput, "hashed_pass
                 hashed_password: hashed_password,
             }
         })
+        return newUser
+
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+
+}
+
+export const upsertUserFromOauth = async (data: Omit<Prisma.UserCreateInput, "hashed_password">) => {
+    try {
+        const plainRandomPassword = generateIdFromEntropySize(15)
+        const hashed_password = await new Argon2id().hash(plainRandomPassword);
+        const newUser = await db.user.upsert({
+            where: { email: data.email }, // Search by email
+            update: {
+                name: data.name,
+                provider: data.provider,
+                providerId: data.providerId,
+                picture: data.picture,
+                access_token: data.access_token
+            },
+            create: {
+                email: data.email,
+                name: data.name,
+                provider: data.provider,
+                providerId: data.providerId,
+                picture: data.picture,
+                hashed_password: hashed_password,
+                access_token: data.access_token
+            },
+        });
+
         return newUser
 
     } catch(err) {
@@ -86,6 +119,18 @@ export const findUserById = async(id: string) => {
             where: {
                 id: id
             }
+        })
+        return user
+    } catch(err) {
+        console.log(err)
+        return null
+    }
+}
+
+export const findUserByEmail = async(email: string) => {
+    try {
+        const user = await db.user.findFirst({
+            where: { email }
         })
         return user
     } catch(err) {

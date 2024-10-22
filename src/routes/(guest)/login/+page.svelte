@@ -23,9 +23,25 @@
             }
         }
     }
+
+    const handleContinueWithGoogle: SubmitFunction = () => {
+      processing = true
+        return async ( { result, update } ) => {
+          console.log(result)
+          await update()
+        }
+    }
 </script>
 
 <div class="max-w-screen-sm w-full bg-white rounded-xl p-8 flex flex-col items-center justify-center shadow-lg">
+    <form action="?/loginGoogle" method="post" use:enhance={handleContinueWithGoogle}>
+        <Button type="submit" class="flex gap-2" disabled={processing}>
+            Continue With Google
+            {#if processing}
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 200 200"><linearGradient id="a5"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"></stop><stop offset="1" stop-color="#FFFFFF"></stop></linearGradient><circle fill="none" stroke="url(#a5)" stroke-width="15" stroke-linecap="round" stroke-dasharray="0 44 0 44 0 44 0 44 0 360" cx="100" cy="100" r="70" transform-origin="center"><animateTransform type="rotate" attributeName="transform" calcMode="discrete" dur="2" values="360;324;288;252;216;180;144;108;72;36" repeatCount="indefinite"></animateTransform></circle></svg>
+            {/if}
+        </Button>
+      </form>
     <h2 class="text-xl py-4 font-semibold">Login To Your Account</h2>
     <form class="w-full" method="POST" action="?/login" use:enhance={handleLogin}>
         <div class="flex flex-col items-center space-y-4 w-full">

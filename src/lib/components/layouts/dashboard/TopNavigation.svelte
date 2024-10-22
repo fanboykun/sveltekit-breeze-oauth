@@ -59,7 +59,7 @@
                                 src={createGradientAvatar()}
                                 data-melt-avatar-image=""
                                 data-bits-avatar-image=""
-                                alt="@shadcn"
+                                alt="avatar"
                                 class="aspect-square h-full w-full"
                                 style="display: block;"
                             />

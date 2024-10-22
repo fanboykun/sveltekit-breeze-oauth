@@ -49,6 +49,7 @@
 		"@lucia-auth/adapter-prisma": "^4.0.1",
 		"@prgm/sveltekit-progress-bar": "2.0.0",
 		"@prisma/client": "5.20.0",
+		"arctic": "^2.0.1",
 		"bits-ui": "^0.21.16",
 		"clsx": "^2.1.1",
 		"svelte-radix": "^1.1.1",
